@@ -3,3 +3,5 @@
 /target
 /.idea
 /.gitignore
+.idea/vcs.xml
+target/
