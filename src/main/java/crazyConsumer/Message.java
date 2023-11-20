@@ -7,6 +7,16 @@ package crazyConsumer;
  */
 public class Message {
 
-    private String topic;
     private String messageBody;
+
+    public Message(String messageBody) {
+        this.messageBody = messageBody;
+    }
+
+    @Override
+    public String toString() {
+        return "Message{" +
+                "messageBody='" + messageBody + '\'' +
+                '}';
+    }
 }

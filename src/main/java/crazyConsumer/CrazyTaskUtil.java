@@ -12,7 +12,7 @@ import java.util.concurrent.*;
  */
 public class CrazyTaskUtil {
 
-    private static Map<String, ExecutorService> executors = new ConcurrentHashMap<>();
+    private static final Map<String, ExecutorService> executors = new ConcurrentHashMap<>();
 
     public static ExecutorService getOrInitExecutor(String taskName, int threadNum) {
         ExecutorService executorService = executors.get(taskName);
@@ -30,20 +30,17 @@ public class CrazyTaskUtil {
 
     private static ExecutorService initPool(String taskName, int threadNum) {
         // init pool
-        return new ThreadPoolExecutor(threadNum, threadNum, 0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<>()
-                , new ThreadFactoryBuilder().setNameFormat(taskName + "-%d").build());
+        return new ThreadPoolExecutor(threadNum, threadNum,
+                0L, TimeUnit.MILLISECONDS,
+                new LinkedBlockingQueue<>(),
+                new ThreadFactoryBuilder().setNameFormat(taskName + "-%d").build());
     }
 
-    public static void shutdown(String taskName) {
-        ExecutorService executorService = executors.get(taskName);
-        if (executorService != null) {
-            executorService.shutdown();
+    public static void shutdownThreadPool(String taskName) {
+        ExecutorService remove = executors.remove(taskName);
+        if (remove != null) {
+            remove.shutdown();
         }
     }
 
-    public static void shutdownAll() {
-        executors.forEach((taskName, executorService) -> {
-            executorService.shutdown();
-        });
-    }
 }
