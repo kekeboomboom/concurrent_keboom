@@ -10,7 +10,7 @@ import java.util.concurrent.locks.ReentrantLock;
 public class Account {
 
     private Long id;
-    private volatile double balance;
+    private double balance;
     private ReentrantLock lock = new ReentrantLock();
     // 记录转账次数，没什么用，只是为了验证transfer执行的次数
     AtomicInteger count = new AtomicInteger(0);
@@ -21,15 +21,15 @@ public class Account {
     }
 
     public void deposit(double amount) {
-        lock.lock();
+//        lock.lock();
         balance += amount;
-        lock.unlock();
+//        lock.unlock();
     }
 
     public void withdraw(double amount) {
-        lock.lock();
+//        lock.lock();
         balance -= amount;
-        lock.unlock();
+//        lock.unlock();
     }
 
     public double getBalance() {
@@ -58,8 +58,11 @@ public class Account {
                         try {
                             this.withdraw(amount);
                             target.deposit(amount);
-                            flag = false;
                             count.incrementAndGet();
+                            flag = false;
+                            Thread.sleep(1);
+                        } catch (Exception e) {
+                            throw new RuntimeException(e);
                         } finally {
                             secondLock.lock.unlock();
                         }
