@@ -1,7 +1,5 @@
 package crazyConsumer;
 
-import cn.hutool.log.Log;
-
 /**
  * {@code @author:} keboom
  * {@code @date:} 2023/11/17
